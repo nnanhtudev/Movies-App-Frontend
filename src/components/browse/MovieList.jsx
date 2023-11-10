@@ -15,7 +15,8 @@ function MovieList({ title, fetchUrl, isLargeRow }) {
 	useEffect(() => {
 		async function fetchData() {
 			const request = await axios.get(fetchUrl);
-			setMovies(request.data.results);
+			console.log(request);
+			setMovies(request.data.DT.results);
 			return request;
 		}
 		fetchData();
@@ -28,11 +29,12 @@ function MovieList({ title, fetchUrl, isLargeRow }) {
 		} else {
 			setSelectedMovie(movie);
 			movieTrailer(movie?.title || '')
-			.then((url) => {
-				const urlParams = new URLSearchParams(new URL(url).search);
-				setTrailerUrl(urlParams.get('v'));
-			})
-			.catch((error) => console.log(error));
+				.then((url) => {
+					const urlParams = new URLSearchParams(new URL(url).search);
+					console.log(urlParams);
+					setTrailerUrl(urlParams.get('v'));
+				})
+				.catch((error) => console.log(error));
 		}
 	};
 
@@ -49,9 +51,8 @@ function MovieList({ title, fetchUrl, isLargeRow }) {
 							key={movie.id}
 							onClick={() => handleClick(movie)}
 							className={`row_poster ${isLargeRow && 'row_posterLarge'}`}
-							src={`${base_url}${
-								isLargeRow ? movie.poster_path : movie.backdrop_path
-							}`}
+							src={`${base_url}${isLargeRow ? movie.poster_path : movie.backdrop_path
+								}`}
 							alt={movie.name}
 						/>
 					);

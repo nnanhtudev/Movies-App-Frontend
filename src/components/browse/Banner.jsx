@@ -5,20 +5,27 @@ import './Banner.css';
 
 function Banner() {
 	const [movie, setMovie] = useState([]);
-
+	const [page, setPage] = useState(1);
 	useEffect(() => {
 		async function fetchData() {
-			const request = await axios.get(requests.fetchNetflixOriginals);
-			setMovie(
-				request.data.results[
-					Math.floor(Math.random() * request.data.results.length - 1)
-				]
-			);
-			// Math.floor(Math.random() * request.data.results.length -1)
-			return request;
+			try {
+				const request = await axios.get(requests.fetchNetflixOriginals(page));
+				console.log(request.data)
+				const results = request.data.DT.results;
+				const randomIndex = Math.floor(Math.random() * results.length);
+				const randomMovie = results[randomIndex];
+				setMovie(randomMovie);
+
+				// console.log(setMovie())
+				return request;
+			} catch (error) {
+				console.error("Error fetching data:", error);
+			}
 		}
+
 		fetchData();
-	}, []);
+	}, [page]);
+
 
 	// console.log(movie)
 
